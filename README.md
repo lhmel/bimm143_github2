@@ -1,2 +1,2 @@
 # bimm143_github2
-My work from F23
+My classwork for F23 in BIMM143 at UC San Diego.
