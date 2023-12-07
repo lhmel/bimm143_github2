@@ -18,3 +18,5 @@ My classwork for F23 in [BIMM143](https://bioboot.github.io/bimm143_F23/) at UC 
 -Class 12: [Genome Informatics](https://github.com/lhmel/bimm143_github2/blob/main/class12/class12.md)
 
 -Class 13: [Transcriptomics and the analysis of RNA-Seq data](https://github.com/lhmel/bimm143_github2/blob/main/class13/class13.md)
+
+-Class 14: [RNA-Seq Mini Project](https://github.com/lhmel/bimm143_github2/blob/main/class14/class14.md)
