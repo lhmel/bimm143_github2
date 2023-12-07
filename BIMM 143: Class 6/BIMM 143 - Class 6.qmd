@@ -97,11 +97,11 @@ mean(x)
 ```
 This is my working snippet of code that solves the problem for all my example student inputs!
 ```{r}
-x=student3
+#x=student3
 #Mask NA values to 0
-x[is.na(x)]=0
+#x[is.na(x)]=0
 #Drop lowest score and get the mean
-mean(x[-which.min(x)])
+#mean(x[-which.min(x)])
 ```
 ```{r}
 #x=student2
