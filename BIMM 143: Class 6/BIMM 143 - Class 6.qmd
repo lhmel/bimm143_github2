@@ -104,13 +104,13 @@ x[is.na(x)]=0
 mean(x[-which.min(x)])
 ```
 ```{r}
-x=student2
-sum(is.na(x))
-mean(x, na.rm=TRUE)
-mean(na.omit(x))
-mean(x)
-mean(is.na(x))
-mean(na.omit[x])
+#x=student2
+#sum(is.na(x))
+#mean(x, na.rm=TRUE)
+#mean(na.omit(x))
+#mean(x)
+#mean(is.na(x))
+#mean(na.omit[x])
 ```
 
 >Q1. Write a function grade() to determine an overall grade from a vector of student homework
