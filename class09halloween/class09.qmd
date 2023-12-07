@@ -1,0 +1,181 @@
+---
+title: "Class 9 Halloween Project"
+author: "Liana Melikian (A16675734)"
+format: pdf
+---
+
+```{r}
+candy_file="candy-data.csv"
+candy=read.csv(candy_file,row.names=1)
+head(candy)
+```
+Q1
+```{r}
+nrow(candy)
+```
+Q2
+```{r}
+sum(candy$fruity)
+```
+
+Q3
+```{r}
+candy["Snickers",]$winpercent
+```
+
+Q4
+```{r}
+candy["Kit Kat",]$winpercent
+```
+
+Q5
+```{r}
+candy["Tootsie Roll Snack Bars",]$winpercent
+```
+
+```{r}
+library(skimr)
+skim(candy)
+```
+
+Q6
+winpercent
+
+Q7
+1 means the candy is made of chocolate, and 0 means it isn't.
+
+Q8
+```{r}
+hist(candy$winpercent)
+```
+Q9.
+No, it is skewed to the right.
+
+Q10. Above
+```{r}
+mean(candy$winpercent)
+```
+
+Q11. Higher
+```{r}
+choc.inds=as.logical(candy$chocolate)
+choc.win=candy[choc.inds,"winpercent"]
+mean(choc.win)
+fruit.inds=as.logical(candy$fruity)
+fruit.win=candy[fruit.inds,"winpercent"]
+mean(fruit.win)
+mean(choc.win)>mean(fruit.win)
+```
+
+Q12. Yes, p<0.05
+```{r}
+t_test_result=t.test(choc.win, fruit.win)
+print(t_test_result)
+```
+
+Q13. Nik L Nip, Boston Baked Beans, Chiclets, Super Bubble, Jawbusters
+```{r}
+head(candy[order(candy$winpercent),], n=5)
+```
+Q14. Reese's PB cup, Reese's miniatures, Twix, Kit Kat, Snickers
+```{r}
+head(candy[order(-candy$winpercent), ], n = 5)
+```
+Q15.
+```{r}
+library(ggplot2)
+ggplot(candy)+
+  aes(winpercent, rownames(candy))+
+  geom_col(fill="blue")
+```
+Q16.
+```{r}
+ggplot(candy)+
+  aes(winpercent, reorder(rownames(candy),winpercent))+
+  geom_col(fill="blue")
+```
+
+```{r}
+my_cols=rep("black", nrow(candy))
+my_cols[as.logical(candy$chocolate)] = "chocolate"
+my_cols[as.logical(candy$bar)] = "brown"
+my_cols[as.logical(candy$fruity)] = "pink"
+ggplot(candy) + 
+  aes(winpercent, reorder(rownames(candy),winpercent)) +
+  geom_col(fill=my_cols) 
+```
+ 
+ Q17. Sixlets
+ 
+ Q18. Starburst
+ 
+```{r}
+library(ggrepel)
+# How about a plot of price vs win
+ggplot(candy) +
+  aes(winpercent, pricepercent, label=rownames(candy)) +
+  geom_point(col=my_cols) + 
+  geom_text_repel(col=my_cols, size=3.3, max.overlaps = 5)
+```
+Q19. Reeses miniatures
+
+Q20. Nik L Nip, Nestle Smarties, Ring pop, Hersheys Krackel, Hersheys Milk Chocolate
+Nik L Nip is least popular
+```{r}
+ord <- order(candy$pricepercent, decreasing = TRUE)
+head( candy[ord,c(11,12)], n=5 )
+```
+
+```{r}
+library(corrplot)
+cij <- cor(candy)
+corrplot(cij)
+```
+
+Q22. chocolate and fruity
+Q23. chocolate and winpercent
+
+```{r}
+pca= prcomp(candy, scale = TRUE)
+summary(pca)
+```
+```{r}
+plot(pca$x[, 1], pca$x[, 2], 
+     xlab = "PC1", ylab = "PC2")
+```
+```{r}
+plot(pca$x[,1:2], col=my_cols, pch=16)
+```
+```{r}
+# Make a new data-frame with our PCA results and candy data
+my_data <- cbind(candy, pca$x[,1:3])
+p <- ggplot(my_data) + 
+        aes(x=PC1, y=PC2, 
+            size=winpercent/100,  
+            text=rownames(my_data),
+            label=rownames(my_data)) +
+        geom_point(col=my_cols)
+
+p
+```
+
+```{r}
+library(ggrepel)
+
+p + geom_text_repel(size=3.3, col=my_cols, max.overlaps = 7)  + 
+  theme(legend.position = "none") +
+  labs(title="Halloween Candy PCA Space",
+       subtitle="Colored by type: chocolate bar (dark brown), chocolate other (light brown), fruity (red), other (black)",
+       caption="Data from 538")
+```
+
+```{r}
+library(plotly)
+#ggplotly(p)
+```
+
+```{r}
+par(mar=c(8,4,2,2))
+barplot(pca$rotation[,1], las=2, ylab="PC1 Contribution")
+```
+Q24. Fruity, hard, and pluribus. Yes these make sense to me.
