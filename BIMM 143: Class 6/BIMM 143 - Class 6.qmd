@@ -1,0 +1,191 @@
+---
+title: "Class 6: R Functions"
+author: "Liana Melikian - A16675734"
+format: pdf
+---
+#All abot function in R
+
+Functions are the way we get stuff done in R. We call a function to read data, compute stuff, plot stuff, etc.
+
+R makes writing functions accessible but we should always start by trying to get a working snippet of code first before we write our function.
+
+##Todays lab
+
+We will grade a whole class of student assignments. We will always try to start with a simplified version of the problem.
+
+```{r}
+# Example input vectors to start with
+student1 <- c(100, 100, 100, 100, 100, 100, 100, 90)
+student2 <- c(100, NA, 90, 90, 90, 90, 97, 80)
+student3 <- c(90, NA, NA, NA, NA, NA, NA, NA)
+mean(student1)
+```
+
+If we want the avergae we use the `mean()` function
+Let's be nice instructors and drop the lowest score so the answer here should be 100.
+
+```{r}
+min(student1)
+```
+I can use the min function to find the lowest value.
+
+I found the `which.min()` function that may be useful here. How does it work? Let's try it.
+
+```{r}
+student1
+which.min(student1)
+```
+
+```{r}
+student1[-8]
+student1[-which.min(student1)]
+
+```
+
+I can use the minus syntax trick to get everything but the element with the min value. 
+
+```{r}
+mean(student1[-which.min(student1)])
+```
+student2
+```{r}
+student2
+mean(student2[-which.min(student2)])
+```
+
+where is the problem? oh it is the `mean()` with NA input. 
+```{r}
+mean(student2,na.rm = TRUE)
+```
+
+```{r}
+student3
+mean(student3,na.rm=TRUE)
+```
+No bueno. We need to fix this!
+I want to stop working with `student1`,`student2`,etc. and typing it out every time so let's instead work with an input called `x`
+
+```{r}
+x=student2
+x
+```
+
+We want to override the NA values with zero - if you miss homework you score zero on the homework.
+
+Google and Claude told me about the `is.na()` function.
+
+```{r}
+x
+is.na(x)
+```
+
+We can use logicals to index a vector.
+```{r}
+y=1:5
+y
+y>3
+y[y>3]=100
+y
+```
+```{r}
+x[is.na(x)]=0
+x
+```
+
+```{r}
+mean(x)
+```
+This is my working snippet of code that solves the problem for all my example student inputs!
+```{r}
+x=student3
+#Mask NA values to 0
+x[is.na(x)]=0
+#Drop lowest score and get the mean
+mean(x[-which.min(x)])
+```
+```{r}
+x=student2
+sum(is.na(x))
+mean(x, na.rm=TRUE)
+mean(na.omit(x))
+mean(x)
+mean(is.na(x))
+mean(na.omit[x])
+```
+
+>Q1. Write a function grade() to determine an overall grade from a vector of student homework
+assignment scores dropping the lowest single score. If a student misses a homework (i.e. has an
+NA value) this can be used as a score to be potentially dropped. Your final function should be
+adquately explained with code comments and be able to work on an example class gradebook
+such as this one in CSV format: “https://tinyurl.com/gradeinput” [3pts]
+
+```{r}
+grade=function(x) {
+#Mask NA values to 0
+x[is.na(x)]=0
+#Drop lowest score and get the mean
+mean(x[-which.min(x)])
+}
+```
+
+Use this function:
+```{r}
+grade(student1)
+grade(student2)
+grade(student3)
+```
+
+We need to read the gradebook
+```{r}
+gradebook=read.csv("https://tinyurl.com/gradeinput", row.names=1)
+gradebook
+```
+I can use the `apply()` function.
+```{r}
+ans=apply(gradebook,1,grade)
+ans
+#1=row,2=column
+```
+>Q2. Using your grade() function and the supplied gradebook, Who is the top scoring student
+overall in the gradebook? [3pts]
+
+```{r}
+which.max(ans)
+max(ans)
+```
+The top scoring student is student 18.
+
+>Q3. From your analysis of the gradebook, which homework was toughest on students (i.e. obtained
+the lowest scores overall? [2pts]
+
+We could calculate the `mean()` score for each homework
+```{r}
+mask=gradebook
+mask[is.na(mask)]=0
+hw.ave=apply(mask,2,mean)
+hw.ave
+which.min(hw.ave)
+```
+
+We could take the sum
+```{r}
+apply(gradebook,2,sum,na.rm=T)
+```
+
+HW 2 was toughest on students.
+
+>Q4. Optional Extension: From your analysis of the gradebook, which homework was most
+predictive of overall score (i.e. highest correlation with average grade score)? [1p]
+
+```{r}
+apply(mask,2,cor,y=ans)
+which.min(apply(mask,2,cor,y=ans))
+```
+```{r}
+which.max(apply(mask,2,cor,y=ans))
+```
+HW 5 was most predictive of overall score.
+
+
+
+
