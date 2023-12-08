@@ -3,7 +3,7 @@ My classwork for F23 in [BIMM143](https://bioboot.github.io/bimm143_F23/) at UC 
 
 -Class 5: [Intro to GGPLOT](https://github.com/lhmel/bimm143_github2/blob/main/class05/class05.md)
 
--Class 6: [R Functions]
+-Class 6: [R Functions](https://github.com/lhmel/bimm143_github2/blob/main/BIMM%20143%3A%20Class%206/BIMM%20143%20-%20Class%206.md)
 
 -Class 7: [Hands on with Principarl Component Analysis (PCA)](https://github.com/lhmel/bimm143_github2/blob/main/class07/Class%207.md)
 
